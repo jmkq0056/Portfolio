@@ -28,6 +28,8 @@
       document.documentElement.classList.add('booted');
       document.documentElement.style.overflow = '';
       if (instant) { boot.remove(); return; }
+      /* the reveal always lands on the hero — never a restored mid-page position */
+      scrollTo(0, 0);
       boot.classList.add('done');
       setTimeout(() => boot.classList.add('gone'), 550);
     }
@@ -35,6 +37,10 @@
     if (!boot) { document.documentElement.classList.add('booted'); return; }
     if (reduced || seen) { finish(true); return; }
 
+    /* keep the browser from re-applying a remembered scroll or anchor under the overlay */
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+    scrollTo(0, 0);
     document.documentElement.style.overflow = 'hidden';
     let skipped = false;
     const skip = () => { if (!skipped) { skipped = true; finish(false); } };
