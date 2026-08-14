@@ -332,7 +332,13 @@
     });
   }
 
-  addEventListener('resize', measure, { passive: true });
+  /* the mobile URL bar fires height-only resizes constantly while scrolling;
+     re-measuring then causes thrash and jumps. Only a width change matters. */
+  let lastW = innerWidth;
+  addEventListener('resize', () => {
+    if (innerWidth !== lastW) { lastW = innerWidth; measure(); }
+    else { vh = innerHeight; }
+  }, { passive: true });
   addEventListener('load', measure);
   measure();
 
