@@ -341,7 +341,7 @@
     font-size:12px;color:var(--dim);letter-spacing:.01em;line-height:1.9;
   }
   .tag{display:inline}
-  .tag+.tag::before{content:'\00a0\00a0·\00a0\00a0';color:var(--line-strong)}
+  .tag+.tag::before{content:' · ';margin:0 5px;color:var(--line-strong)}
 
   .xp{max-width:780px}
   .job{
@@ -433,6 +433,15 @@
     .dot{animation:none}
     html{scroll-behavior:auto}
   }
+
+  /* mobile overflow guards */
+  img,svg,video,canvas{max-width:100%;height:auto}
+  .grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  @media(max-width:760px){.grid{grid-template-columns:minmax(0,1fr)}}
+  .card,.skillset,.edu-row,.feature,.feature2,.num{min-width:0}
+  .card>*,.top>*,.edu-row>*{min-width:0}
+  .tags{overflow-wrap:break-word}
+  body{overflow-x:clip}
 </style>
 </head>
 <body>
@@ -491,7 +500,6 @@
       </div>
     </div>
   </div>
-  <div class="scrollcue" data-i18n="scroll">Scroll</div>
 </div>
 
 <div class="numbers">
