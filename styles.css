@@ -295,12 +295,22 @@ html.booted .portrait{animation-play-state:running}
 }
 @media(max-width:860px){
   .gathr{height:340svh}
-  .gathr .stage{justify-content:flex-start;padding:84px 0 24px}
-  .gathr-grid{grid-template-columns:1fr;gap:22px}
-  .gathr h2{margin-bottom:14px}
-  .steps{min-height:12em}
-  .gathr-visual{perspective:900px}
-  .gathr-visual .browser img{max-height:32dvh;width:100%;object-fit:cover;object-position:top}
+  /* text sizes itself, the screenshot absorbs whatever height remains —
+     this layout cannot overflow the stage on any phone */
+  .gathr .stage{justify-content:flex-start;padding:80px 0 20px}
+  .gathr-grid{
+    grid-template-columns:1fr;
+    grid-template-rows:auto minmax(0,1fr);
+    gap:18px;align-items:stretch;
+    flex:1;min-height:0;width:100%;
+  }
+  .gathr h2{margin-bottom:12px;font-size:clamp(26px,7vw,34px)}
+  .steps{min-height:13em}
+  .step p{font-size:15.5px}
+  .gathr-visual{perspective:900px;min-height:0;display:flex}
+  .panel3d{display:flex;min-height:0;width:100%}
+  .gathr-visual .browser{display:flex;flex-direction:column;min-height:0;width:100%}
+  .gathr-visual .browser img{flex:1;min-height:0;width:100%;object-fit:cover;object-position:top}
 }
 
 /* ---------- scene 5 · chicken waves ---------- */
