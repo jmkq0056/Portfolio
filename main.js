@@ -15,10 +15,67 @@
   const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  /* ---------- boot stinger: terminal types, then the site is revealed ----------
+     Skippable with any input, runs once per session, never for reduced motion. */
+  (function bootSequence() {
+    const boot = document.getElementById('boot');
+    const out = document.getElementById('term-out');
+    let seen = false;
+    try { seen = sessionStorage.getItem('booted') === '1'; } catch (e) {}
+
+    function finish(instant) {
+      try { sessionStorage.setItem('booted', '1'); } catch (e) {}
+      document.documentElement.classList.add('booted');
+      document.documentElement.style.overflow = '';
+      if (instant) { boot.remove(); return; }
+      boot.classList.add('done');
+      setTimeout(() => boot.classList.add('gone'), 550);
+    }
+
+    if (!boot) { document.documentElement.classList.add('booted'); return; }
+    if (reduced || seen) { finish(true); return; }
+
+    document.documentElement.style.overflow = 'hidden';
+    let skipped = false;
+    const skip = () => { if (!skipped) { skipped = true; finish(false); } };
+    ['pointerdown', 'keydown', 'wheel', 'touchstart'].forEach(ev =>
+      addEventListener(ev, skip, { once: true, passive: true }));
+    setTimeout(skip, 6000); // failsafe: nothing may strand a visitor behind the overlay
+
+    const P = '<span class="p">~ %</span> ';
+    const script = [
+      { cmd: 'whoami', out: 'Jawad Mehmood Khan Qayyum · software engineer' },
+      { cmd: 'ls work/', out: 'gathr-solutions/   chickenwaves.dk/   educado/' },
+      { cmd: './portfolio --open', out: null }
+    ];
+    let html = '';
+    const caret = '<span class="caret"></span>';
+    const render = extra => { out.innerHTML = html + extra; };
+
+    (async () => {
+      const wait = ms => new Promise(r => setTimeout(r, ms));
+      for (const line of script) {
+        if (skipped) return;
+        html += P;
+        let typed = '';
+        for (const ch of line.cmd) {
+          if (skipped) return;
+          typed += ch;
+          render(typed + caret);
+          await wait(34);
+        }
+        html += typed + '\n';
+        if (line.out) html += '<span class="o">' + line.out + '</span>\n';
+        render(caret);
+        await wait(line.out ? 300 : 420);
+      }
+      if (!skipped) { skipped = true; finish(false); }
+    })();
+  })();
+
   /* ---------- i18n ---------- */
   const DA = {
     nav_about: 'Om mig', nav_work: 'Projekter', nav_xp: 'Erfaring', nav_skills: 'Kompetencer', nav_contact: 'Kontakt',
-    status: '<b>Åben for deltidsarbejde</b>&ensp;·&ensp;on site i København&ensp;·&ensp;remote hvor som helst',
     lede: 'Grundlægger af <strong>Gathr Solutions</strong> — platformen danske vagtfirmaer driver deres forretning på, live på App Store og Google Play. Jeg tager produkter fra første commit til produktion og holder dem kørende.',
     meta_loc: 'Greve, Storkøbenhavn',
     claim: 'Jeg bygger software, som andre folks forretninger faktisk kører på. To af dem er live lige nu.',
@@ -83,7 +140,7 @@
     e2_s: 'Tildelt 6. juli 2026. Bachelorprojekt bedømt til 12, et A på ECTS skalaen.',
     e3_s: 'Gymnasial uddannelse.',
     k_contact: 'Kontakt', h_contact: 'Lad os tage en snak',
-    contact_p: 'Jeg leder efter udviklingsarbejde på deltid, omkring 10 til 20 timer om ugen, ved siden af min kandidat. On site eller hybrid i Storkøbenhavn fungerer fint, og det samme gør remote for teams andre steder. Full stack, mobil, backend og CI/CD interesserer mig alt sammen, og jeg er åben for både ansættelse og opgaver som selvstændig.',
+    contact_p: 'Full stack, mobil, backend, CI/CD — hvis det ender hos rigtige brugere, interesserer det mig. København eller remote. Den hurtigste vej til mig er en mail.',
     btn_mail: 'Skriv til mig',
     foot: 'København · <a href="https://github.com/jmkq0056/Portfolio" target="_blank" rel="noopener">kildekode</a>'
   };

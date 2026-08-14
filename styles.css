@@ -143,20 +143,8 @@ nav .wrap{display:flex;align-items:center;justify-content:space-between;height:6
 h2{font-size:clamp(30px,4.4vw,46px);font-weight:800;letter-spacing:-.035em;line-height:1.08;margin-bottom:18px}
 
 /* ---------- scene 1 · hero ---------- */
-.hero{height:185svh}
+.hero{height:150svh}
 .hero-inner{display:grid;grid-template-columns:1.5fr .9fr;gap:56px;align-items:center;width:100%}
-.status{
-  display:inline-flex;align-items:center;gap:12px;
-  font-size:12.5px;font-weight:700;color:var(--ink-soft);
-  letter-spacing:.16em;text-transform:uppercase;margin-bottom:30px;
-}
-.status b{color:var(--accent-ink)}
-.dot{width:8px;height:8px;border-radius:50%;background:var(--accent);animation:pulse 2.2s infinite;flex:none}
-@keyframes pulse{
-  0%{box-shadow:0 0 0 0 rgba(13,110,95,.45)}
-  70%{box-shadow:0 0 0 9px rgba(13,110,95,0)}
-  100%{box-shadow:0 0 0 0 rgba(13,110,95,0)}
-}
 /* the name recedes upward and fades as the visitor scrolls past */
 .hero-text{
   transform:translateY(calc(var(--p) * -16svh));
@@ -170,27 +158,29 @@ h1{
 /* short viewports (laptops with browser chrome): keep the whole hero on screen */
 @media(max-height:760px){
   h1{font-size:clamp(34px,5vw,64px)}
-  .status{margin-bottom:18px}
   .lede{font-size:16.5px}
 }
 h1 em{font-style:italic;color:var(--accent);letter-spacing:-.03em}
 h1 .ln{display:block;overflow:hidden}
-h1 .ln span{display:block;transform:translateY(112%);animation:rise .85s cubic-bezier(.2,.65,.2,1) forwards}
+h1 .ln span{display:block;transform:translateY(112%);animation:rise .85s cubic-bezier(.2,.65,.2,1) forwards;animation-play-state:paused}
+html.booted h1 .ln span{animation-play-state:running}
 h1 .ln:nth-child(2) span{animation-delay:.08s}
 h1 .ln:nth-child(3) span{animation-delay:.16s}
 @keyframes rise{to{transform:none}}
 .lede{
   font-size:clamp(17px,2.2vw,21px);color:var(--ink-soft);
   max-width:560px;line-height:1.55;
-  opacity:0;animation:fade .8s .4s forwards;
+  opacity:0;animation:fade .8s .4s forwards;animation-play-state:paused;
 }
+html.booted .lede{animation-play-state:running}
 .lede strong{color:var(--ink);font-weight:650}
 @keyframes fade{to{opacity:1}}
 .meta{
   display:flex;flex-wrap:wrap;gap:10px 24px;margin-top:32px;
   font-size:14.5px;color:var(--dim);font-weight:500;
-  opacity:0;animation:fade .8s .55s forwards;
+  opacity:0;animation:fade .8s .55s forwards;animation-play-state:paused;
 }
+html.booted .meta{animation-play-state:running}
 .meta a{color:var(--ink-soft);border-bottom:2px solid var(--line-strong);padding-bottom:1px;transition:.18s}
 .meta a:hover{color:var(--accent-ink);border-color:var(--accent)}
 /* portrait drifts slower than the text — cheap parallax depth */
@@ -198,8 +188,9 @@ h1 .ln:nth-child(3) span{animation-delay:.16s}
   justify-self:end;
   transform:translateY(calc(var(--p) * -6svh));
   opacity:calc(1 - var(--p) * 1.3);
-  animation:fade .9s .5s backwards;
+  animation:fade .9s .5s backwards;animation-play-state:paused;
 }
+html.booted .portrait{animation-play-state:running}
 .portrait img{
   width:100%;max-width:320px;border-radius:22px;
   border:1px solid var(--line);
@@ -208,18 +199,17 @@ h1 .ln:nth-child(3) span{animation-delay:.16s}
 }
 @keyframes float{0%,100%{transform:translateY(0) rotate(-.6deg)}50%{transform:translateY(-12px) rotate(.6deg)}}
 @media(max-width:860px){
-  .hero{height:150svh}
+  .hero{height:125svh}
   /* top-align under the fixed nav — centering slid the portrait behind it */
   .hero .stage{justify-content:flex-start;padding-top:92px}
   .hero-inner{grid-template-columns:1fr;gap:26px}
   .portrait{justify-self:start;order:-1}
   .portrait img{max-width:110px;border-radius:16px}
-  .status{margin-bottom:20px}
   .meta{margin-top:24px}
 }
 
 /* ---------- scene 2 · the claim ---------- */
-.claim{height:260svh;background:var(--paper-2)}
+.claim{height:195svh;background:var(--paper-2)}
 .claim .stage{border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 .claim-text{
   font-size:clamp(30px,5vw,58px);
@@ -228,7 +218,7 @@ h1 .ln:nth-child(3) span{animation-delay:.16s}
 }
 /* each word switches on as --p sweeps through its index (set by JS) */
 .claim-text .w{
-  opacity:clamp(.10, calc((var(--p) * (var(--n) + 3) - var(--i)) / 2), 1);
+  opacity:clamp(.14, calc((var(--p) * (var(--n) + 2) + 1 - var(--i)) / 2), 1);
 }
 .claim-text .w.hot{color:var(--accent)}
 
@@ -247,7 +237,7 @@ h1 .ln:nth-child(3) span{animation-delay:.16s}
 }
 
 /* ---------- scene 4 · gathr walkthrough ---------- */
-.gathr{height:440svh;color:#f2faf8}
+.gathr{height:400svh;color:#f2faf8}
 .gathr .stage{background:linear-gradient(135deg,#0c3f37,#0d6e5f 55%,#12836f)}
 .gathr-grid{display:grid;grid-template-columns:.95fr 1.15fr;gap:48px;align-items:center;width:100%}
 .gathr .kicker{color:#8fd6c7}
@@ -302,7 +292,7 @@ h1 .ln:nth-child(3) span{animation-delay:.16s}
   font-family:var(--mono);
 }
 @media(max-width:860px){
-  .gathr{height:380svh}
+  .gathr{height:340svh}
   .gathr-grid{grid-template-columns:1fr;gap:26px;align-content:center}
   .gathr .stage{padding:20px 0}
   .steps{min-height:13em}
@@ -322,7 +312,10 @@ h1 .ln:nth-child(3) span{animation-delay:.16s}
 }
 /* screenshot rises faster than the text — layered parallax */
 .waves-visual{
-  transform:translateY(calc(clamp(-1, .5 - var(--p), 1) * 70px));
+  transform:
+    perspective(1100px)
+    rotateY(calc(-13deg * clamp(0, 1 - var(--p) * 1.9, 1)))
+    translateY(calc(clamp(-1, .5 - var(--p), 1) * 70px));
 }
 .waves-visual .browser{border-color:var(--line);box-shadow:0 24px 60px rgba(22,24,27,.18);background:var(--card)}
 .waves-visual .browser-bar{background:rgba(163,74,8,.12)}
@@ -348,7 +341,9 @@ h1 .ln:nth-child(3) span{animation-delay:.16s}
   border-radius:var(--radius);padding:30px;
   box-shadow:var(--shadow);
   display:flex;flex-direction:column;
+  transition:transform .25s ease,box-shadow .25s ease;
 }
+.hcard:hover{transform:translateY(-5px);box-shadow:0 18px 44px rgba(21,26,23,.14)}
 .hcard .top{display:flex;justify-content:space-between;align-items:baseline;gap:14px}
 .hcard h3{font-size:19px;font-weight:750;letter-spacing:-.015em}
 .hcard .yr{font-family:var(--mono);font-size:12px;color:var(--dim);white-space:nowrap}
@@ -466,8 +461,10 @@ footer a{border-bottom:1px solid var(--line-strong)}
   [data-scene]{--p:1}
   .hero,.claim,.gathr,.hscroll{height:auto}
   .scene .stage{position:static;height:auto;padding:80px 0}
-  .hero-text,.portrait,.waves-copy,.waves-visual,.panel3d,.track,
+  .hero-text,.portrait,.lede,.meta,.waves-copy,.waves-visual,.panel3d,.track,
   .job,.skillset,.edu-row,.contact{transform:none;opacity:1}
+  h1 .ln span{transform:none}
+  #boot{display:none}
   .claim-text .w{opacity:1}
   .step{position:static;opacity:1;transform:none;margin-bottom:22px}
   .steps{min-height:0}
@@ -475,3 +472,48 @@ footer a{border-bottom:1px solid var(--line-strong)}
   .track{flex-direction:column;width:auto;padding:0 22px}
   .hcard{width:auto}
 }
+
+/* ---------- boot stinger ---------- */
+#boot{
+  position:fixed;inset:0;z-index:200;
+  background:var(--paper);
+  display:flex;align-items:center;justify-content:center;padding:20px;
+  transition:opacity .5s ease;
+}
+#boot.done{opacity:0;pointer-events:none}
+#boot.gone{display:none}
+.term{
+  width:min(600px,94vw);
+  background:#10241f;
+  border:1px solid rgba(255,255,255,.09);
+  border-radius:12px;overflow:hidden;
+  box-shadow:0 30px 80px rgba(10,20,16,.45);
+  transform:translateY(0);
+  transition:transform .5s ease;
+}
+#boot.done .term{transform:translateY(-26px) scale(.97)}
+.term-bar{
+  display:flex;align-items:center;gap:7px;
+  background:rgba(0,0,0,.32);padding:11px 14px;
+}
+.term-bar i{width:12px;height:12px;border-radius:50%}
+.term-bar i.r{background:#ff5f57}
+.term-bar i.y{background:#febc2e}
+.term-bar i.g{background:#28c840}
+.term-bar span{
+  margin-left:8px;font-family:var(--mono);
+  font-size:12px;color:rgba(255,255,255,.5);
+}
+#term-out{
+  font-family:var(--mono);font-size:13.5px;line-height:1.75;
+  color:#bfe8dc;padding:18px 20px 22px;min-height:172px;
+  white-space:pre-wrap;word-break:break-word;
+}
+#term-out .p{color:#5fd3b8}
+#term-out .o{color:#8fa89f}
+#term-out .caret{
+  display:inline-block;width:8px;height:15px;
+  background:#5fd3b8;vertical-align:text-bottom;
+  animation:blink 1s steps(1) infinite;
+}
+@keyframes blink{50%{opacity:0}}
