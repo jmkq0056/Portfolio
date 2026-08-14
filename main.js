@@ -43,8 +43,8 @@
     setTimeout(skip, 9000); // failsafe: nothing may strand a visitor behind the overlay
 
     const P = '<span class="p">~ %</span> ';
+    /* the window title already says who this is — one command is enough */
     const script = [
-      { cmd: 'whoami', out: 'Jawad Mehmood Khan Qayyum · software engineer' },
       { cmd: './portfolio --open', out: null }
     ];
     let html = '';
