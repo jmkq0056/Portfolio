@@ -134,7 +134,7 @@ nav .wrap{display:flex;align-items:center;justify-content:space-between;height:6
 
 /* ---------- shared scene plumbing ---------- */
 .scene{position:relative}
-.scene .stage{position:sticky;top:0;height:100svh;overflow:hidden;display:flex;flex-direction:column;justify-content:center}
+.scene .stage{position:sticky;top:0;height:100svh;height:100dvh;overflow:hidden;display:flex;flex-direction:column;justify-content:center}
 /* section labels set in the utility face — no decorative dash */
 .kicker{
   font-family:var(--mono);
@@ -295,9 +295,12 @@ html.booted .portrait{animation-play-state:running}
 }
 @media(max-width:860px){
   .gathr{height:340svh}
-  .gathr-grid{grid-template-columns:1fr;gap:26px;align-content:center}
-  .gathr .stage{padding:20px 0}
-  .steps{min-height:13em}
+  .gathr .stage{justify-content:flex-start;padding:84px 0 24px}
+  .gathr-grid{grid-template-columns:1fr;gap:22px}
+  .gathr h2{margin-bottom:14px}
+  .steps{min-height:12em}
+  .gathr-visual{perspective:900px}
+  .gathr-visual .browser img{max-height:32dvh;width:100%;object-fit:cover;object-position:top}
 }
 
 /* ---------- scene 5 · chicken waves ---------- */
