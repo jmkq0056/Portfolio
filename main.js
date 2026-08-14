@@ -255,6 +255,21 @@
     requestAnimationFrame(frame);
   }
 
+  /* pointer tilt on the 3D panel — desktop only, on top of the scroll pose */
+  const visual = document.querySelector('.gathr-visual');
+  const panel = document.querySelector('.panel3d');
+  if (visual && panel && !reduced && matchMedia('(pointer: fine)').matches) {
+    visual.addEventListener('mousemove', e => {
+      const r = visual.getBoundingClientRect();
+      panel.style.setProperty('--mx', ((e.clientX - r.left) / r.width - 0.5) * 7);
+      panel.style.setProperty('--my', ((e.clientY - r.top) / r.height - 0.5) * 7);
+    });
+    visual.addEventListener('mouseleave', () => {
+      panel.style.setProperty('--mx', 0);
+      panel.style.setProperty('--my', 0);
+    });
+  }
+
   addEventListener('resize', measure, { passive: true });
   addEventListener('load', measure);
   measure();
