@@ -183,10 +183,8 @@
   function setTheme(d, remember) {
     dark = d;
     document.documentElement.dataset.theme = d ? 'dark' : 'light';
-    document.querySelectorAll('#themebtn,#themebtn2').forEach(b => {
-      b.textContent = d ? '☀' : '☾';
-      b.setAttribute('aria-pressed', String(d));
-    });
+    document.querySelectorAll('#themebtn,#themebtn2').forEach(b =>
+      b.setAttribute('aria-pressed', String(d)));
     if (remember) { try { localStorage.setItem('theme', d ? 'dark' : 'light'); } catch (e) {} }
   }
   setTheme(dark, false);
@@ -348,5 +346,11 @@
   /* restore language: stored choice beats browser locale */
   let storedLang = null; try { storedLang = localStorage.getItem('lang'); } catch (e) {}
   if (storedLang === 'da' || storedLang === 'en') { if (storedLang !== 'en') setLang(storedLang); }
-  else if ((navigator.language || '').toLowerCase().startsWith('da')) setLang('da');
+  else {
+    /* device language OR a Copenhagen clock reads as a Danish visitor —
+       catches Danes whose phone is set to English, no geo request needed */
+    const langs = (navigator.languages || [navigator.language || '']).join(',').toLowerCase();
+    let tz = ''; try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (e) {}
+    if (langs.includes('da') || tz === 'Europe/Copenhagen') setLang('da');
+  }
 })();

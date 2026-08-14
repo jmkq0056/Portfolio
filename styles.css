@@ -113,9 +113,18 @@ nav .wrap{display:flex;align-items:center;justify-content:space-between;height:6
 .theme{
   background:none;border:1.5px solid var(--line-strong);border-radius:8px;
   width:36px;height:33px;cursor:pointer;color:var(--ink-soft);
-  font-size:15px;line-height:1;transition:.18s;flex:none;
+  transition:.18s;flex:none;position:relative;
 }
 .theme:hover{border-color:var(--accent);color:var(--accent-ink)}
+.theme svg{
+  width:16px;height:16px;position:absolute;top:50%;left:50%;margin:-8px 0 0 -8px;
+  transition:opacity .3s,transform .45s cubic-bezier(.3,.7,.3,1);
+}
+/* light shows the moon (tap for dark), dark shows the sun — with a half-turn */
+.theme .ic-sun{opacity:0;transform:rotate(-120deg) scale(.4)}
+.theme .ic-moon{opacity:1;transform:none}
+[data-theme="dark"] .theme .ic-sun{opacity:1;transform:none}
+[data-theme="dark"] .theme .ic-moon{opacity:0;transform:rotate(120deg) scale(.4)}
 .burger{display:none;background:none;border:0;cursor:pointer;padding:10px;margin-right:-10px}
 .burger i{display:block;width:22px;height:2px;background:var(--ink);margin:5px 0;border-radius:2px;transition:.25s}
 .burger.open i:nth-child(1){transform:translateY(7px) rotate(45deg)}
@@ -260,7 +269,7 @@ html.booted .portrait{animation-play-state:running}
 .step-dots i.on{background:#8fd6c7}
 .plinks{display:flex;flex-wrap:wrap;gap:11px}
 .plink{
-  display:inline-flex;align-items:center;
+  display:inline-flex;align-items:center;gap:8px;
   font-size:14px;font-weight:600;
   background:rgba(255,255,255,.12);color:#fff;
   border:1px solid rgba(255,255,255,.22);
@@ -540,3 +549,10 @@ footer a{border-bottom:1px solid var(--line-strong)}
   animation:blink 1s steps(1) infinite;
 }
 @keyframes blink{50%{opacity:0}}
+
+/* ---------- inline icons ---------- */
+.ic{width:15px;height:15px;flex:none}
+.plink .ic{fill:currentColor}
+.plink .ic[fill="none"]{fill:none}
+.btn .ic{width:16px;height:16px;fill:currentColor}
+.btn .ic[fill="none"]{fill:none}
