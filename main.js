@@ -40,12 +40,11 @@
     const skip = () => { if (!skipped) { skipped = true; finish(false); } };
     ['pointerdown', 'keydown', 'wheel', 'touchstart'].forEach(ev =>
       addEventListener(ev, skip, { once: true, passive: true }));
-    setTimeout(skip, 6000); // failsafe: nothing may strand a visitor behind the overlay
+    setTimeout(skip, 9000); // failsafe: nothing may strand a visitor behind the overlay
 
     const P = '<span class="p">~ %</span> ';
     const script = [
       { cmd: 'whoami', out: 'Jawad Mehmood Khan Qayyum · software engineer' },
-      { cmd: 'ls work/', out: 'gathr-solutions/   chickenwaves.dk/   educado/' },
       { cmd: './portfolio --open', out: null }
     ];
     let html = '';
@@ -54,6 +53,8 @@
 
     (async () => {
       const wait = ms => new Promise(r => setTimeout(r, ms));
+      render(caret);
+      await wait(650);                       // the prompt sits there a beat first
       for (const line of script) {
         if (skipped) return;
         html += P;
@@ -62,12 +63,13 @@
           if (skipped) return;
           typed += ch;
           render(typed + caret);
-          await wait(34);
+          await wait(62);                    // human typing speed
         }
+        await wait(260);                     // beat before "enter"
         html += typed + '\n';
         if (line.out) html += '<span class="o">' + line.out + '</span>\n';
         render(caret);
-        await wait(line.out ? 300 : 420);
+        await wait(line.out ? 1050 : 800);   // time to actually read it
       }
       if (!skipped) { skipped = true; finish(false); }
     })();
