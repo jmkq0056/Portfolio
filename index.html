@@ -46,9 +46,12 @@
 
 <!-- boot stinger: a terminal types, then the site is revealed. Skippable, once per session -->
 <noscript><style>#boot{display:none}html:not(.booted){overflow:auto}</style></noscript>
-<div id="boot" aria-hidden="true">
+<div id="boot" role="dialog" aria-label="Intro terminal">
   <div class="term">
-    <div class="term-bar"><i class="r"></i><i class="y"></i><i class="g"></i><span>jawad@copenhagen — zsh</span></div>
+    <div class="term-bar">
+      <button class="tl r" id="term-close" aria-label="Close terminal"></button><i class="tl y"></i><i class="tl g"></i>
+      <span>jawad@copenhagen — zsh</span>
+    </div>
     <pre id="term-out"></pre>
   </div>
 </div>

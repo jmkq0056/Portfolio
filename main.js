@@ -20,11 +20,8 @@
   (function bootSequence() {
     const boot = document.getElementById('boot');
     const out = document.getElementById('term-out');
-    let seen = false;
-    try { seen = sessionStorage.getItem('booted') === '1'; } catch (e) {}
 
     function finish(instant) {
-      try { sessionStorage.setItem('booted', '1'); } catch (e) {}
       document.documentElement.classList.add('booted');
       document.documentElement.style.overflow = '';
       if (instant) { boot.remove(); return; }
@@ -35,7 +32,7 @@
     }
 
     if (!boot) { document.documentElement.classList.add('booted'); return; }
-    if (reduced || seen) { finish(true); return; }
+    if (reduced) { finish(true); return; }
 
     /* keep the browser from re-applying a remembered scroll or anchor under the overlay */
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
@@ -44,8 +41,10 @@
     document.documentElement.style.overflow = 'hidden';
     let skipped = false;
     const skip = () => { if (!skipped) { skipped = true; finish(false); } };
-    ['pointerdown', 'keydown', 'wheel', 'touchstart'].forEach(ev =>
-      addEventListener(ev, skip, { once: true, passive: true }));
+    /* deliberate exits: the window's close button, Escape, or trying to scroll */
+    document.getElementById('term-close').addEventListener('click', skip);
+    addEventListener('keydown', e => { if (e.key === 'Escape') skip(); });
+    addEventListener('wheel', skip, { once: true, passive: true });
     setTimeout(skip, 9000); // failsafe: nothing may strand a visitor behind the overlay
 
     const P = '<span class="p">~ %</span> ';
